@@ -15,9 +15,9 @@ use App\Http\Controllers\crudController;
 */
 
 Route::get('/', function () {
-    return view('index');
+    return view('admin'); //halaman index dengan template
 });
-Route::get('menu', 'App\Http\Controllers\crudController@menu');
+Route::get('menu', 'App\Http\Controllers\crudController@menu'); //ke halaman index tanpa template
 Route::get('datatable', 'App\Http\Controllers\crudController@index');
 Route::get('edit/{id}/edit', 'App\Http\Controllers\crudController@edit');
 Route::post('store', 'App\Http\Controllers\crudController@store');

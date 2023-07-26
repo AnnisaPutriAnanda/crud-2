@@ -16,22 +16,29 @@
 <body>
       
 <div class="container">
-
-    <h1>Table</h1>
-    <a class="btn btn-success" href="javascript:void(0)" id="create">Tambahkan Data</a>
-
+    <div class="card">
+      <!---->
+      <div class="card-header">
+    <h1>Table Person</h1>
+    <a class="btn btn-success" href="javascript:void(0)" id="create">Create Data</a>
+  </div>
+  <!---->
+  <div class="card-body">
     <table id="data-table" class="table table-bordered data-table">
-      {{-- <thead>
-        <tr>
-            <th>id</th>
-            <th>name</th>
-            <th>desc</th>
-            <th>created_at</th>
-            <th>updated_at</th>
-            <th>action</th>
-        </tr>
-    </thead> --}}
+      <thead>
+      <tr>
+        <th class="no-sort" data-orderable="false">No</th>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th class="no-sort">Created At</th>
+        <th class="no-sort">Updated At</th>
+        <th class="no-sort" data-orderable="false">Action</th>
+      </tr>
+      </thead>
     </table>
+  </div>
+  </div>
 </div>
 
 <!--Modal-->
@@ -59,18 +66,19 @@
 
                 <div class="form-group">
                   <label class="col-form-label">Name</label>
-                  <input type="text" class="form-control" id="name" name="name" placeholder="Nama..">
+                  <input type="text" class="form-control" id="name" name="name" placeholder="Nama.." required>
                 </div>
                 <div class="form-group">
                   <label class="col-form-label">Description</label>
-                  <input type="text" class="form-control" id="desc" name="desc" placeholder="Deskripsi.."></textarea>
+                  <input type="text" class="form-control" id="desc" name="desc" placeholder="Deskripsi.." required></textarea>
                 </div>
                 <button type="submit" id="submit-btn" class="btn btn-primary">Submit</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
               </form>
             </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
+            {{-- <div class="modal-footer"> --}}
+              
+            {{-- </div> --}}
         </div>
       </div>
     </div>
@@ -113,14 +121,16 @@
                     {data: 'id', name: 'id'},
                     {data: 'name', name: 'name'},
                     {data: 'desc', name: 'desc'},
-                    {data: 'created_at', name: 'created_at'},
-                    {data: 'updated_at', name: 'updated_at'},
-                    {data: 'action', name: 'action'},
+                    {data: 'created_at', name: 'created_at', "searchable": false},
+                    {data: 'updated_at', name: 'updated_at', "searchable": false},
+                    {data: 'action', name: 'action', "searchable": false},
                 ],
                     
         });
         //tampil modal khusus create
         $('#create').click(function(){
+            $("#id").val('');
+            $('#form-modal')[0].reset();
             $('#exampleModalLabel').html('Modal Tambah');
             $('#exampleModal').modal('show');
         })
@@ -148,8 +158,8 @@
       //  })
 
         //bila form di submit
-        $('#form-modal').submit(function(e){
-           e.preventDefault();
+        $('#form-modal').submit(function(){
+          //  e.preventDefault();
 
            var id = $('#id').val();
            var name = $('#name').val();
@@ -164,7 +174,7 @@
                     desc : desc,
                   },
                   success:function(data){
-                    table.draw();
+                    table.ajax.reload();
                     Swal.fire({
                         icon: 'success',
                         title: 'Your work has been saved',
@@ -199,7 +209,7 @@
                                     type: "DELETE",
                                     url: "{{ url('delete') }}" + '/' + id,
                                     success: function(data) {
-                                      table.draw();
+                                      table.ajax.reload();
                                       Swal.fire({
                         icon: 'success',
                         title: 'Your work has been saved',
